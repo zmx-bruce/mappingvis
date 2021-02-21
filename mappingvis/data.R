@@ -155,3 +155,15 @@ plot_rgb <- function(x, channels=NULL, ...) {
       plot.margin = unit(c(0, 0, 0, 0), "cm")
     )
 }
+#' Plot the result of the prediction using TP,TN,FN,FP classes.
+TF_plot<-function(y,y_hat,probability=0.4,channel=1){
+  tp<-y[channel,,]==1&y_hat[channel,,]>=probability
+  tn<-y[channel,,]==1&y_hat[channel,,]<probability
+  fn<-y[channel,,]==0&y_hat[channel,,]>=probability
+  fp<-y[channel,,]==0&y_hat[channel,,]<probability
+  result<-1*tp+2*tn+3*fn+4*fp
+  par(mar=c(4,4,4,6))
+  par(xpd=TRUE)
+  image(result,col=c(3,1,2,0))
+  legend("right", inset=c(-0.2,0), legend=c("TP","TN","FN","FP"), pch=15, col=c(3,1,2,0),bty="n")
+}
